@@ -1,3 +1,6 @@
+// Including this at the top as a note: it's always good to make comments in you're code so others understand what is happening
+// comments also let people know where they can edit or look for instances in you're code.
+
 package org.ps;
 
 import javax.swing.*;
