@@ -58,7 +58,7 @@ Here are some images of the Accounting Ledger application in action:
 
 Watch the video demonstration of the Accounting Ledger application:
 
-[![Watch the video](https://img.youtube.com/vi/YOUR_VIDEO_ID/0.jpg)](https://streamable.com/relhx2)
+[![Watch the video](Assets/thumbnail.png)](https://streamable.com/relhx2)
 *Click the image above to watch the demonstration.*
 
 ## License
