@@ -1,4 +1,3 @@
-
 # Accounting Ledger Application
 
 This Accounting Ledger application is developed as part of the **CapstoneOne_AccountingLedger** assignment. It manages financial transactions and supports both Command Line Interface (CLI) and Graphical User Interface (GUI) modes, allowing users to view, add, and calculate income and expenses.
@@ -44,6 +43,23 @@ This Accounting Ledger application is developed as part of the **CapstoneOne_Acc
 
 1. When prompted, choose between CLI (enter `1`) or GUI (enter `2`) mode.
 2. Use the provided options in the selected mode to manage your transactions.
+
+## Image Showcase
+
+Here are some images of the Accounting Ledger application in action:
+
+![CLI Mode Screenshot](Assets/cli_mode_screenshot.png)
+*CLI Mode: View Transactions*
+
+![GUI Mode Screenshot](Assets/gui_mode_screenshot.png)
+*GUI Mode: Add Transaction*
+
+## Video Demonstration
+
+Watch the video demonstration of the Accounting Ledger application:
+
+[![Watch the video](https://img.youtube.com/vi/YOUR_VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=YOUR_VIDEO_ID)
+*Click the image above to watch the demonstration.*
 
 ## License
 
