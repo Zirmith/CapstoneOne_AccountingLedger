@@ -42,6 +42,10 @@ public class Main {
         }
     }
 
+
+
+
+
     // Command-line interface logic
     private static void runCLI(Scanner scanner) {
         loadTransactions(); // Load existing transactions from CSV
@@ -51,8 +55,9 @@ public class Main {
             System.out.println("1. View Transactions");
             System.out.println("2. Add Transaction");
             System.out.println("3. View Income/Expense Totals");
-            System.out.println("4. Exit");
-            System.out.print("Select an option (1-4): ");
+            System.out.println("4. Search Transactions");
+            System.out.println("5. Exit");
+            System.out.print("Select an option (1-5): ");
 
             int choice = scanner.nextInt();
             scanner.nextLine();  // Consume newline character
@@ -68,6 +73,9 @@ public class Main {
                     viewTotals(); // View total income and expenses
                     break;
                 case 4:
+                    searchTransactions(scanner); // Search for transactions
+                    break;
+                case 5:
                     saveTransactions(); // Save transactions before exiting
                     System.out.println("Thank you for using the Accounting Ledger. Goodbye!");
                     System.exit(0);
@@ -84,18 +92,20 @@ public class Main {
         frame.setSize(400, 300);
 
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(4, 1)); // Layout with 4 rows, 1 column
+        panel.setLayout(new GridLayout(5, 1)); // Layout with 5 rows, 1 column
 
         // Create buttons for the GUI
         JButton viewButton = new JButton("View Transactions");
         JButton addButton = new JButton("Add Transaction");
         JButton totalsButton = new JButton("View Income/Expense Totals");
+        JButton searchButton = new JButton("Search Transactions");
         JButton exitButton = new JButton("Exit");
 
         // Action listeners for button clicks
         viewButton.addActionListener(e -> JOptionPane.showMessageDialog(frame, getTransactions()));
         addButton.addActionListener(e -> addTransactionGUI(frame));
         totalsButton.addActionListener(e -> JOptionPane.showMessageDialog(frame, getTotals()));
+        searchButton.addActionListener(e -> searchTransactionsGUI(frame));
         exitButton.addActionListener(e -> {
             saveTransactions(); // Save transactions before exiting
             System.exit(0);
@@ -105,48 +115,67 @@ public class Main {
         panel.add(viewButton);
         panel.add(addButton);
         panel.add(totalsButton);
+        panel.add(searchButton);
         panel.add(exitButton);
 
         frame.getContentPane().add(panel);
         frame.setVisible(true); // Make the GUI visible
     }
 
-    // GUI-based add transaction logic
-    private static void addTransactionGUI(JFrame frame) {
-        // Create input fields for the transaction details
-        JTextField dateField = new JTextField(10);
-        JTextField timeField = new JTextField(10);
-        JTextField descriptionField = new JTextField(20);
-        JTextField vendorField = new JTextField(20);
-        JTextField amountField = new JTextField(10);
+    // Search transactions in CLI
+    private static void searchTransactions(Scanner scanner) {
+        System.out.println("\n--- Search Transactions ---");
+        System.out.print("Enter search term (date, description, vendor, or amount): ");
+        String searchTerm = scanner.nextLine();
+        List<Transaction> foundTransactions = new ArrayList<>();
 
-        // Create a panel for the input fields
-        JPanel panel = new JPanel(new GridLayout(5, 2));
-        panel.add(new JLabel("Date (YYYY-MM-DD):"));
-        panel.add(dateField);
-        panel.add(new JLabel("Time (HH:MM:SS):"));
-        panel.add(timeField);
-        panel.add(new JLabel("Description:"));
-        panel.add(descriptionField);
-        panel.add(new JLabel("Vendor:"));
-        panel.add(vendorField);
-        panel.add(new JLabel("Amount:"));
-        panel.add(amountField);
+        for (Transaction t : transactions) {
+            if (t.matchesSearchTerm(searchTerm)) {
+                foundTransactions.add(t);
+            }
+        }
+
+        if (foundTransactions.isEmpty()) {
+            System.out.println("No transactions found matching the search term: " + searchTerm);
+        } else {
+            System.out.println("--- Search Results ---");
+            for (Transaction t : foundTransactions) {
+                System.out.println(t);
+            }
+        }
+    }
+
+    // GUI search transactions logic
+    private static void searchTransactionsGUI(JFrame frame) {
+        // Create input field for the search term
+        JTextField searchField = new JTextField(20);
+
+        // Create a panel for the input field
+        JPanel panel = new JPanel();
+        panel.add(new JLabel("Search Term:"));
+        panel.add(searchField);
 
         // Show the input dialog
-        int result = JOptionPane.showConfirmDialog(frame, panel, "Add Transaction", JOptionPane.OK_CANCEL_OPTION);
+        int result = JOptionPane.showConfirmDialog(frame, panel, "Search Transactions", JOptionPane.OK_CANCEL_OPTION);
         if (result == JOptionPane.OK_OPTION) {
-            // Get user input
-            String date = dateField.getText();
-            String time = timeField.getText();
-            String description = descriptionField.getText();
-            String vendor = vendorField.getText();
-            double amount = Double.parseDouble(amountField.getText());
+            String searchTerm = searchField.getText();
+            List<Transaction> foundTransactions = new ArrayList<>();
 
-            // Create a new transaction object and add it to the list
-            Transaction newTransaction = new Transaction(date, time, description, vendor, amount);
-            transactions.add(newTransaction);
-            JOptionPane.showMessageDialog(frame, "Transaction added successfully!");
+            for (Transaction t : transactions) {
+                if (t.matchesSearchTerm(searchTerm)) {
+                    foundTransactions.add(t);
+                }
+            }
+
+            if (foundTransactions.isEmpty()) {
+                JOptionPane.showMessageDialog(frame, "No transactions found matching the search term: " + searchTerm);
+            } else {
+                StringBuilder sb = new StringBuilder("--- Search Results ---\n");
+                for (Transaction t : foundTransactions) {
+                    sb.append(t).append("\n");
+                }
+                JOptionPane.showMessageDialog(frame, sb.toString());
+            }
         }
     }
 
@@ -234,48 +263,82 @@ public class Main {
         String vendor = scanner.nextLine();
         System.out.print("Amount: ");
         double amount = scanner.nextDouble();
-        scanner.nextLine();  // Consume newline
+        scanner.nextLine(); // Consume newline character
 
         Transaction newTransaction = new Transaction(date, time, description, vendor, amount);
         transactions.add(newTransaction);
-        System.out.println("Transaction added successfully.");
+        System.out.println("Transaction added successfully!");
     }
 
-    // View income and expense totals (CLI)
+    // Add a new transaction (GUI)
+    private static void addTransactionGUI(JFrame frame) {
+        // Create input fields for the new transaction
+        JTextField dateField = new JTextField(10);
+        JTextField timeField = new JTextField(10);
+        JTextField descriptionField = new JTextField(20);
+        JTextField vendorField = new JTextField(20);
+        JTextField amountField = new JTextField(10);
+
+        // Create a panel for input fields
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(5, 2));
+        panel.add(new JLabel("Date (YYYY-MM-DD):"));
+        panel.add(dateField);
+        panel.add(new JLabel("Time (HH:MM:SS):"));
+        panel.add(timeField);
+        panel.add(new JLabel("Description:"));
+        panel.add(descriptionField);
+        panel.add(new JLabel("Vendor:"));
+        panel.add(vendorField);
+        panel.add(new JLabel("Amount:"));
+        panel.add(amountField);
+
+        // Show the input dialog
+        int result = JOptionPane.showConfirmDialog(frame, panel, "Add Transaction", JOptionPane.OK_CANCEL_OPTION);
+        if (result == JOptionPane.OK_OPTION) {
+            String date = dateField.getText();
+            String time = timeField.getText();
+            String description = descriptionField.getText();
+            String vendor = vendorField.getText();
+            double amount = Double.parseDouble(amountField.getText());
+
+            Transaction newTransaction = new Transaction(date, time, description, vendor, amount);
+            transactions.add(newTransaction);
+            JOptionPane.showMessageDialog(frame, "Transaction added successfully!");
+        }
+    }
+
+    // View income and expense totals
     private static void viewTotals() {
         double totalIncome = 0;
         double totalExpenses = 0;
 
         for (Transaction t : transactions) {
-            if (t.getAmount() < 0) {
-                totalExpenses += t.getAmount();
+            if (t.getAmount() >= 0) {
+                totalIncome += t.getAmount(); // Income
             } else {
-                totalIncome += t.getAmount();
+                totalExpenses += t.getAmount(); // Expenses
             }
         }
 
-        System.out.println("\n--- Totals ---");
-        System.out.println("Total Income: $" + totalIncome);
-        System.out.println("Total Expenses: $" + totalExpenses);
-        System.out.println("Net Total: $" + (totalIncome + totalExpenses));
+        System.out.printf("Total Income: $%.2f%n", totalIncome);
+        System.out.printf("Total Expenses: $%.2f%n", totalExpenses);
     }
 
-    // Returns income and expense totals as a string for GUI display
+    // Get totals for GUI display
     private static String getTotals() {
         double totalIncome = 0;
         double totalExpenses = 0;
 
         for (Transaction t : transactions) {
-            if (t.getAmount() < 0) {
-                totalExpenses += t.getAmount();
+            if (t.getAmount() >= 0) {
+                totalIncome += t.getAmount(); // Income
             } else {
-                totalIncome += t.getAmount();
+                totalExpenses += t.getAmount(); // Expenses
             }
         }
 
-        return "--- Totals ---\n" +
-                "Total Income: $" + totalIncome + "\n" +
-                "Total Expenses: $" + totalExpenses + "\n" +
-                "Net Total: $" + (totalIncome + totalExpenses);
+        return String.format("Total Income: $%.2f\nTotal Expenses: $%.2f", totalIncome, totalExpenses);
     }
 }
+
