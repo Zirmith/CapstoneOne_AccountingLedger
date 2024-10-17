@@ -64,3 +64,9 @@ Watch the video demonstration of the Accounting Ledger application:
 ## License
 
 This project is licensed under the MIT License.
+
+## Changes Made:
+- **Features**
+  - Added the sorting feature to the features section.
+  
+

@@ -1,6 +1,3 @@
-// Including this at the top as a note: it's always good to make comments in you're code so others understand what is happening
-// comments also let people know where they can edit or look for instances in you're code.
-
 package org.ps;
 
 import javax.swing.*;
@@ -10,6 +7,8 @@ import java.nio.file.*;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Comparator;
+
 
 public class Main {
     private static final String CSV_FILE = "transactions.csv"; // Path to the CSV file
@@ -18,7 +17,7 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Welcome to the Accounting Ledger!");
 
-        // Prompt user for mode selection
+        // Prompt user for mode selection (CLI or GUI)
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please select the mode you want to use:");
         System.out.println("1. Command Line Interface (CLI)");
@@ -27,6 +26,8 @@ public class Main {
 
         int modeChoice = scanner.nextInt();
         scanner.nextLine(); // Consume newline character
+        loadTransactions(); // Load existing transactions from CSV
+
 
         // Launch the appropriate interface based on user choice
         switch (modeChoice) {
@@ -42,13 +43,8 @@ public class Main {
         }
     }
 
-
-
-
-
     // Command-line interface logic
     private static void runCLI(Scanner scanner) {
-        loadTransactions(); // Load existing transactions from CSV
 
         while (true) {
             System.out.println("\n--- Main Menu ---");
@@ -87,6 +83,8 @@ public class Main {
 
     // Graphical user interface logic
     private static void runGUI() {
+
+
         JFrame frame = new JFrame("Accounting Ledger");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 300);
@@ -96,6 +94,7 @@ public class Main {
 
         // Create buttons for the GUI
         JButton viewButton = new JButton("View Transactions");
+        JButton sortButton = new JButton("Sort Transactions");
         JButton addButton = new JButton("Add Transaction");
         JButton totalsButton = new JButton("View Income/Expense Totals");
         JButton searchButton = new JButton("Search Transactions");
@@ -103,6 +102,7 @@ public class Main {
 
         // Action listeners for button clicks
         viewButton.addActionListener(e -> JOptionPane.showMessageDialog(frame, getTransactions()));
+        sortButton.addActionListener(e -> sortTransactionsGUI(frame)); // Open sort dialog
         addButton.addActionListener(e -> addTransactionGUI(frame));
         totalsButton.addActionListener(e -> JOptionPane.showMessageDialog(frame, getTotals()));
         searchButton.addActionListener(e -> searchTransactionsGUI(frame));
@@ -113,6 +113,7 @@ public class Main {
 
         // Add buttons to the panel
         panel.add(viewButton);
+        panel.add(sortButton);
         panel.add(addButton);
         panel.add(totalsButton);
         panel.add(searchButton);
@@ -120,6 +121,44 @@ public class Main {
 
         frame.getContentPane().add(panel);
         frame.setVisible(true); // Make the GUI visible
+    }
+
+    // GUI for sorting transactions
+    private static void sortTransactionsGUI(JFrame frame) {
+        String[] options = {"Date", "Time", "Amount", "Vendor", "Description"};
+        JComboBox<String> comboBox = new JComboBox<>(options);
+
+        JPanel panel = new JPanel();
+        panel.add(new JLabel("Sort by:"));
+        panel.add(comboBox);
+
+        int result = JOptionPane.showConfirmDialog(frame, panel, "Sort Transactions", JOptionPane.OK_CANCEL_OPTION);
+        if (result == JOptionPane.OK_OPTION) {
+            String selectedOption = (String) comboBox.getSelectedItem();
+            sortTransactions(selectedOption); // Sort the transactions
+            JOptionPane.showMessageDialog(frame, getTransactions()); // Display the sorted transactions
+        }
+    }
+
+    // Sort the transactions based on the selected criteria
+    private static void sortTransactions(String criteria) {
+        switch (criteria) {
+            case "Date":
+                transactions.sort(Comparator.comparing(Transaction::getDate));
+                break;
+            case "Time":
+                transactions.sort(Comparator.comparing(Transaction::getTime));
+                break;
+            case "Amount":
+                transactions.sort(Comparator.comparingDouble(Transaction::getAmount));
+                break;
+            case "Vendor":
+                transactions.sort(Comparator.comparing(Transaction::getVendor));
+                break;
+            case "Description":
+                transactions.sort(Comparator.comparing(Transaction::getDescription));
+                break;
+        }
     }
 
     // Search transactions in CLI
@@ -184,31 +223,13 @@ public class Main {
         try (BufferedReader br = Files.newBufferedReader(Paths.get(CSV_FILE))) {
             String line;
             while ((line = br.readLine()) != null) {
-                String[] values = line.split("\\|");
-
-                // Remove dollar sign and parse amount
-                double amount = Double.parseDouble(values[4].replace("$", "").trim());
-
-                // Create a temporary Transaction object to validate date and time
-                Transaction tempTransaction = new Transaction(values[0].trim(), values[1].trim(), values[2], values[3], amount);
-
-                // Validate date and time after creation
-                if (!tempTransaction.isValidDate(tempTransaction.getDate())) {
-                    System.out.println("Invalid date format: " + tempTransaction.getDate());
-                    continue; // Skip this transaction if invalid
+                Transaction transaction = Transaction.fromCsv(line);
+                if (transaction != null) { // Only add valid transactions
+                    transactions.add(transaction);
                 }
-                if (!tempTransaction.isValidTime(tempTransaction.getTime())) {
-                    System.out.println("Invalid time format: " + tempTransaction.getTime());
-                    continue; // Skip this transaction if invalid
-                }
-
-                // If valid, add to the transactions list
-                transactions.add(tempTransaction);
             }
         } catch (IOException e) {
             System.out.println("No existing transactions found. Starting fresh.");
-        } catch (NumberFormatException e) {
-            System.out.println("Error parsing a transaction amount: " + e.getMessage());
         }
     }
 
@@ -341,4 +362,3 @@ public class Main {
         return String.format("Total Income: $%.2f\nTotal Expenses: $%.2f", totalIncome, totalExpenses);
     }
 }
-
