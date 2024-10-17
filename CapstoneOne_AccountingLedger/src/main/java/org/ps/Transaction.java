@@ -48,15 +48,17 @@ public class Transaction {
         return amount;
     }
 
-    // Check if the transaction matches the search term
-    public boolean matchesSearchTerm(String searchTerm) {
-        String searchLower = searchTerm.toLowerCase();
-        return date.toLowerCase().contains(searchLower) ||
-                time.toLowerCase().contains(searchLower) ||
-                description.toLowerCase().contains(searchLower) ||
-                vendor.toLowerCase().contains(searchLower) ||
-                String.valueOf(amount).contains(searchLower);
+    // Check if the transaction matches the search term with case sensitivity option
+    public boolean matchesSearchTerm(String searchTerm, boolean caseSensitive) {
+        String search = caseSensitive ? searchTerm : searchTerm.toLowerCase();
+
+        return (caseSensitive ? date : date.toLowerCase()).contains(search) ||
+                (caseSensitive ? time : time.toLowerCase()).contains(search) ||
+                (caseSensitive ? description : description.toLowerCase()).contains(search) ||
+                (caseSensitive ? vendor : vendor.toLowerCase()).contains(search) ||
+                String.valueOf(amount).contains(search);
     }
+
 
     // Check if the date format is valid (yyyy-MM-dd)
     public static boolean isValidDate(String date) {
