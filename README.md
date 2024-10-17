@@ -52,6 +52,7 @@ Here are some images of the Accounting Ledger application in action:
 *CLI Mode: View Transactions*
 
 ![GUI Mode Screenshot](Assets/gui_mode_screenshot.png)
+![GUI Mode Screenshot](Assets/OtherUI.png)
 *GUI Mode: Add Transaction*
 
 ## Video Demonstration
