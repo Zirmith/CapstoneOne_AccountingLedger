@@ -1,3 +1,5 @@
+// Version 2.0 (the "MIT"); you may use this file
+
 package org.ps;
 
 import java.text.ParseException;
