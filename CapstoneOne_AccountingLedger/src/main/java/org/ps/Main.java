@@ -1,4 +1,4 @@
-// Version 2.0 (the "MIT"); you may use this file
+// Version 2.5 (the "MIT"); you may use this file
 package org.ps;
 
 import javax.swing.*;
@@ -17,79 +17,84 @@ public class Main {
     private static List<Transaction> transactions = new ArrayList<>(); // List to store transactions
 
     public static void main(String[] args) {
-        System.out.println("Welcome to the Accounting Ledger!");
+        printLineBorder();
+        System.out.println("|          Welcome to the Accounting Ledger!          |");
+        printLineBorder();
 
         // Prompt user for mode selection (CLI or GUI)
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Please select the mode you want to use:");
-        System.out.println("1. Command Line Interface (CLI)");
-        System.out.println("2. Graphical User Interface (GUI) WIP");
+        printLineBorder();
+        System.out.println("| Please select the mode you want to use:             |");
+        System.out.println("| 1. Command Line Interface (CLI)                     |");
+        System.out.println("| 2. Graphical User Interface (GUI) WIP               |");
+        printLineBorder();
         System.out.print("Enter your choice (1 or 2): ");
 
         int modeChoice = scanner.nextInt();
-        scanner.nextLine(); // Consume newline character
+        scanner.nextLine(); 
         loadTransactions(); // Load existing transactions from CSV
 
-
-        // Launch the appropriate interface based on user choice
         switch (modeChoice) {
             case 1:
-                runCLI(scanner);  // Start Command Line Interface
+                runCLI(scanner);  
                 break;
             case 2:
-                SwingUtilities.invokeLater(Main::runGUI);  // Start Graphical User Interface
+                SwingUtilities.invokeLater(Main::runGUI);  // Start Graphical User Interface WIP
                 break;
             default:
-                System.out.println("Invalid choice. Exiting the application.");
+                printLineBorder();
+                System.out.println("| Invalid choice. Exiting the application.            |");
+                printLineBorder();
                 System.exit(0);
         }
     }
 
-
     private static void runCLI(Scanner scanner) {
-
         while (true) {
-            System.out.println("\n--- Main Menu ---");
-            System.out.println("1. Add Deposit");
-            System.out.println("2. Make Payment");
-            System.out.println("3. Ledger");
-            System.out.println("4. Exit");
+            printLineBorder();
+            System.out.println("|                 MAIN MENU                  |");
+            printLineBorder();
+            System.out.println("| 1. Add Deposit                             |");
+            System.out.println("| 2. Make Payment                            |");
+            System.out.println("| 3. Ledger                                  |");
+            System.out.println("| 4. Exit                                    |");
+            printLineBorder();
             System.out.print("Select an option (1-4): ");
 
             int choice = scanner.nextInt();
-            scanner.nextLine();
+            scanner.nextLine(); // Consume newline character
 
             switch (choice) {
                 case 1:
-                    addDeposit(scanner);
+                    addDeposit(scanner); // Add deposit
                     break;
                 case 2:
-                    addPayment(scanner);
+                    addPayment(scanner); // Add payment
                     break;
                 case 3:
-                    runLedgerMenu(scanner);
+                    runLedgerMenu(scanner); // Open ledger menu
                     break;
                 case 4:
                     System.out.println("Thank you for using the Accounting Ledger. Goodbye!");
                     System.exit(0);
-                    break;
-                case 5:
-
-
                 default:
                     System.out.println("Invalid option, please try again.");
             }
         }
     }
 
+
     private static void runLedgerMenu(Scanner scanner) {
         while (true) {
-            System.out.println("\n--- Ledger Menu ---");
-            System.out.println("1. View All Transactions");
-            System.out.println("2. View Deposits");
-            System.out.println("3. View Payments");
-            System.out.println("4. Reports");
-            System.out.println("5. Back to Main Menu");
+            printLineBorder();
+            System.out.println("|              LEDGER MENU                    |");
+            printLineBorder();
+            System.out.println("| 1. View All Transactions                    |");
+            System.out.println("| 2. View Deposits                            |");
+            System.out.println("| 3. View Payments                            |");
+            System.out.println("| 4. Reports                                  |");
+            System.out.println("| 5. Back to Main Menu                        |");
+            printLineBorder();
             System.out.print("Select an option (1-5): ");
 
             int choice = scanner.nextInt();
@@ -116,6 +121,7 @@ public class Main {
         }
     }
 
+
     private static void viewDeposits() {
         System.out.println("--- Deposits ---");
         System.out.printf("%-10s %-8s %-30s %-20s %-10s%n", "Date", "Time", "Description", "Vendor", "Amount");
@@ -141,13 +147,16 @@ public class Main {
 
     private static void runReportsMenu(Scanner scanner) {
         while (true) {
-            System.out.println("\n--- Reports Menu ---");
-            System.out.println("1. Month to Date");
-            System.out.println("2. Previous Month");
-            System.out.println("3. Year to Date");
-            System.out.println("4. Previous Year");
-            System.out.println("5. Search by Vendor");
-            System.out.println("6. Back to Ledger Menu");
+            printLineBorder();
+            System.out.println("|              REPORTS MENU                  |");
+            printLineBorder();
+            System.out.println("| 1. Month to Date Report                    |");
+            System.out.println("| 2. Previous Month Report                   |");
+            System.out.println("| 3. Year to Date Report                     |");
+            System.out.println("| 4. Previous Year Report                    |");
+            System.out.println("| 5. Search by Vendor                        |");
+            System.out.println("| 6. Back to Ledger Menu                     |");
+            printLineBorder();
             System.out.print("Select an option (1-6): ");
 
             int choice = scanner.nextInt();
@@ -155,31 +164,30 @@ public class Main {
 
             switch (choice) {
                 case 1:
-                    // Call method for Month to Date report
-                    generateMonthToDateReport();
+                    generateMonthToDateReport(); // Month to date report
                     break;
                 case 2:
-                    // Call method for Previous Month report
-                    generatePreviousMonthReport();
+                    generatePreviousMonthReport(); // Previous month report
                     break;
                 case 3:
-                    // Call method for Year to Date report
-                    generateYearToDateReport();
+                    generateYearToDateReport(); // Year to date report
                     break;
                 case 4:
-                    // Call method for Previous Year report
-                    generatePreviousYearReport();
+                    generatePreviousYearReport(); // Previous year report
                     break;
                 case 5:
-                    // Call method for Search by Vendor report
-                    searchByVendor(scanner);
+                    searchByVendor(scanner); // Search by vendor
                     break;
                 case 6:
-                    return; // Return to Ledger Menu
+                    return; // Return to the ledger menu
                 default:
                     System.out.println("Invalid option, please try again.");
             }
         }
+    }
+
+    private static void printLineBorder() {
+        System.out.println("+--------------------------------------------+");
     }
 
 
