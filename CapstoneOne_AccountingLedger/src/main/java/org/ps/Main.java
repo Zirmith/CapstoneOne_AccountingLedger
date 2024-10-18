@@ -9,7 +9,8 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Comparator;
-
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class Main {
     private static final String CSV_FILE = "transactions.csv"; // Path to the CSV file
@@ -22,7 +23,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please select the mode you want to use:");
         System.out.println("1. Command Line Interface (CLI)");
-        System.out.println("2. Graphical User Interface (GUI)");
+        System.out.println("2. Graphical User Interface (GUI) WIP");
         System.out.print("Enter your choice (1 or 2): ");
 
         int modeChoice = scanner.nextInt();
@@ -44,14 +45,343 @@ public class Main {
         }
     }
 
-    // Command-line interface logic
+
     private static void runCLI(Scanner scanner) {
 
         while (true) {
             System.out.println("\n--- Main Menu ---");
+            System.out.println("1. Add Deposit");
+            System.out.println("2. Make Payment");
+            System.out.println("3. Ledger");
+            System.out.println("4. Exit");
+            System.out.print("Select an option (1-4): ");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+                case 1:
+                    addDeposit(scanner);
+                    break;
+                case 2:
+                    addPayment(scanner);
+                    break;
+                case 3:
+                    runLedgerMenu(scanner);
+                    break;
+                case 4:
+                    System.out.println("Thank you for using the Accounting Ledger. Goodbye!");
+                    System.exit(0);
+                    break;
+                case 5:
+
+
+                default:
+                    System.out.println("Invalid option, please try again.");
+            }
+        }
+    }
+
+    private static void runLedgerMenu(Scanner scanner) {
+        while (true) {
+            System.out.println("\n--- Ledger Menu ---");
+            System.out.println("1. View All Transactions");
+            System.out.println("2. View Deposits");
+            System.out.println("3. View Payments");
+            System.out.println("4. Reports");
+            System.out.println("5. Back to Main Menu");
+            System.out.print("Select an option (1-5): ");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine();  // Consume newline character
+
+            switch (choice) {
+                case 1:
+                    viewLedgerAll(); // View all transactions
+                    break;
+                case 2:
+                    viewDeposits(); // View only deposit transactions
+                    break;
+                case 3:
+                    viewPayments(); // View only payment transactions
+                    break;
+                case 4:
+                    runReportsMenu(scanner); // Open reports menu
+                    break;
+                case 5:
+                    return; // Return to the main menu
+                default:
+                    System.out.println("Invalid option, please try again.");
+            }
+        }
+    }
+
+    private static void viewDeposits() {
+        System.out.println("--- Deposits ---");
+        System.out.printf("%-10s %-8s %-30s %-20s %-10s%n", "Date", "Time", "Description", "Vendor", "Amount");
+        System.out.println("-----------------------------------------------------------------------");
+        for (Transaction transaction : transactions) {
+            if (transaction.getAmount() > 0) { // Check if it's a deposit
+                System.out.println(transaction);
+            }
+        }
+    }
+
+    private static void viewPayments() {
+        System.out.println("--- Payments ---");
+        System.out.printf("%-10s %-8s %-30s %-20s %-10s%n", "Date", "Time", "Description", "Vendor", "Amount");
+        System.out.println("-----------------------------------------------------------------------");
+        for (Transaction transaction : transactions) {
+            if (transaction.getAmount() < 0) { // Check if it's a payment
+                System.out.println(transaction);
+            }
+        }
+    }
+
+
+    private static void runReportsMenu(Scanner scanner) {
+        while (true) {
+            System.out.println("\n--- Reports Menu ---");
+            System.out.println("1. Month to Date");
+            System.out.println("2. Previous Month");
+            System.out.println("3. Year to Date");
+            System.out.println("4. Previous Year");
+            System.out.println("5. Search by Vendor");
+            System.out.println("6. Back to Ledger Menu");
+            System.out.print("Select an option (1-6): ");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine();  // Consume newline character
+
+            switch (choice) {
+                case 1:
+                    // Call method for Month to Date report
+                    generateMonthToDateReport();
+                    break;
+                case 2:
+                    // Call method for Previous Month report
+                    generatePreviousMonthReport();
+                    break;
+                case 3:
+                    // Call method for Year to Date report
+                    generateYearToDateReport();
+                    break;
+                case 4:
+                    // Call method for Previous Year report
+                    generatePreviousYearReport();
+                    break;
+                case 5:
+                    // Call method for Search by Vendor report
+                    searchByVendor(scanner);
+                    break;
+                case 6:
+                    return; // Return to Ledger Menu
+                default:
+                    System.out.println("Invalid option, please try again.");
+            }
+        }
+    }
+
+
+    private static void generateMonthToDateReport() {
+        System.out.println("--- Month to Date Report ---");
+        Calendar calendar = Calendar.getInstance();
+        int month = calendar.get(Calendar.MONTH) + 1; // Months are 0-based in Calendar
+        int year = calendar.get(Calendar.YEAR);
+        double totalIncome = 0.0;
+        double totalExpenses = 0.0;
+
+        for (Transaction transaction : transactions) {
+            if (transaction.getDate().startsWith(year + "-" + String.format("%02d", month))) {
+                if (transaction.getAmount() > 0) {
+                    totalIncome += transaction.getAmount();
+                } else {
+                    totalExpenses += Math.abs(transaction.getAmount());
+                }
+            }
+        }
+
+        System.out.printf("Total Income: $%.2f%n", totalIncome);
+        System.out.printf("Total Expenses: $%.2f%n", totalExpenses);
+    }
+
+    private static void generatePreviousMonthReport() {
+        System.out.println("--- Previous Month Report ---");
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, -1); // Move to the previous month
+        int month = calendar.get(Calendar.MONTH) + 1; // Months are 0-based in Calendar
+        int year = calendar.get(Calendar.YEAR);
+        double totalIncome = 0.0;
+        double totalExpenses = 0.0;
+
+        for (Transaction transaction : transactions) {
+            if (transaction.getDate().startsWith(year + "-" + String.format("%02d", month))) {
+                if (transaction.getAmount() > 0) {
+                    totalIncome += transaction.getAmount();
+                } else {
+                    totalExpenses += Math.abs(transaction.getAmount());
+                }
+            }
+        }
+
+        System.out.printf("Total Income: $%.2f%n", totalIncome);
+        System.out.printf("Total Expenses: $%.2f%n", totalExpenses);
+    }
+
+    private static void generateYearToDateReport() {
+        System.out.println("--- Year to Date Report ---");
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        double totalIncome = 0.0;
+        double totalExpenses = 0.0;
+
+        for (Transaction transaction : transactions) {
+            if (transaction.getDate().startsWith(String.valueOf(year))) {
+                if (transaction.getAmount() > 0) {
+                    totalIncome += transaction.getAmount();
+                } else {
+                    totalExpenses += Math.abs(transaction.getAmount());
+                }
+            }
+        }
+
+        System.out.printf("Total Income: $%.2f%n", totalIncome);
+        System.out.printf("Total Expenses: $%.2f%n", totalExpenses);
+    }
+
+    private static void generatePreviousYearReport() {
+        System.out.println("--- Previous Year Report ---");
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR) - 1; // Get the previous year
+        double totalIncome = 0.0;
+        double totalExpenses = 0.0;
+
+        for (Transaction transaction : transactions) {
+            if (transaction.getDate().startsWith(String.valueOf(year))) {
+                if (transaction.getAmount() > 0) {
+                    totalIncome += transaction.getAmount();
+                } else {
+                    totalExpenses += Math.abs(transaction.getAmount());
+                }
+            }
+        }
+
+        System.out.printf("Total Income: $%.2f%n", totalIncome);
+        System.out.printf("Total Expenses: $%.2f%n", totalExpenses);
+    }
+
+
+    private static void viewLedgerAll() {
+        System.out.println("--- Transaction Ledger ---");
+        System.out.printf("%-10s %-8s %-30s %-20s %-10s%n", "Date", "Time", "Description", "Vendor", "Amount");
+        System.out.println("-----------------------------------------------------------------------");
+        for (Transaction transaction : transactions) {
+            System.out.println(transaction);
+        }
+    }
+
+
+    private static void searchByVendor(Scanner scanner) {
+        System.out.print("Enter vendor name to search: ");
+        String vendorName = scanner.nextLine().toLowerCase(); // Convert to lowercase for case-insensitive search
+        boolean found = false;
+
+        System.out.printf("%-10s %-8s %-30s %-20s %-10s%n", "Date", "Time", "Description", "Vendor", "Amount");
+        System.out.println("-----------------------------------------------------------------------");
+
+        for (Transaction transaction : transactions) {
+            if (transaction.getVendor().toLowerCase().contains(vendorName)) {
+                found = true;
+                System.out.println(transaction);
+            }
+        }
+
+        if (!found) {
+            System.out.println("No transactions found for vendor: " + vendorName);
+        }
+    }
+
+
+    private static void addDeposit(Scanner scanner) {
+        System.out.print("Enter deposit amount: ");
+        double amount = scanner.nextDouble();
+        scanner.nextLine(); // Consume newline
+        System.out.print("Enter description: ");
+        String description = scanner.nextLine();
+        System.out.print("Enter vendor: ");
+        String vendor = scanner.nextLine();
+
+        // Create a new transaction and save it to the CSV file
+        Transaction transaction = new Transaction(getCurrentDate(), getCurrentTime(), description, vendor, amount);
+        transactions.add(transaction);
+        saveTransactionToCSV(transaction);
+        System.out.println("Deposit added successfully.");
+    }
+
+    private static void addPayment(Scanner scanner) {
+        System.out.print("Enter payment amount: ");
+        double amount = scanner.nextDouble();
+        scanner.nextLine(); // Consume newline
+        System.out.print("Enter description: ");
+        String description = scanner.nextLine();
+        System.out.print("Enter vendor: ");
+        String vendor = scanner.nextLine();
+
+        // Create a new transaction and save it to the CSV file
+        Transaction transaction = new Transaction(getCurrentDate(), getCurrentTime(), description, vendor, -amount);
+        transactions.add(transaction);
+        saveTransactionToCSV(transaction);
+        System.out.println("Payment added successfully.");
+    }
+
+
+
+    private static void loadTransactions() {
+        try (BufferedReader br = new BufferedReader(new FileReader(CSV_FILE))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split("\\|");
+                if (parts.length == 5) {
+                    String date = parts[0];
+                    String time = parts[1];
+                    String description = parts[2];
+                    String vendor = parts[3];
+                    double amount = Double.parseDouble(parts[4]);
+                    transactions.add(new Transaction(date, time, description, vendor, amount));
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error loading transactions: " + e.getMessage());
+        }
+    }
+
+    private static void saveTransactionToCSV(Transaction transaction) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(CSV_FILE, true))) {
+            bw.write(transaction.toCSV());
+            bw.newLine();
+        } catch (IOException e) {
+            System.out.println("Error saving transaction: " + e.getMessage());
+        }
+    }
+
+    private static String getCurrentDate() {
+        return new SimpleDateFormat("yyyy-MM-dd").format(System.currentTimeMillis());
+    }
+
+    private static String getCurrentTime() {
+        return new SimpleDateFormat("HH:mm:ss").format(System.currentTimeMillis());
+    }
+
+
+
+    // Command-line interface logic
+    private static void runCLI2(Scanner scanner) {
+
+        while (true) {
+            System.out.println("\n--- Main Menu ---");
             System.out.println("1. View Transactions");
-            System.out.println("2. Add Transaction");
-            System.out.println("3. View Income/Expense Totals");
+            System.out.println("2. Add Deposit");
+            System.out.println("3. View Income/Expense Totals / Reports");
             System.out.println("4. Search Transactions");
             System.out.println("5. Exit");
             System.out.print("Select an option (1-5): ");
@@ -108,8 +438,8 @@ public class Main {
         // Create buttons for the GUI
         JButton viewButton = createStyledButton("View Transactions");
         JButton sortButton = createStyledButton("Sort Transactions");
-        JButton addButton = createStyledButton("Add Transaction");
-        JButton totalsButton = createStyledButton("View Income/Expense Totals");
+        JButton addButton = createStyledButton("Add Deposit");
+        JButton totalsButton = createStyledButton("View Income/Expense Totals / Reports");
         JButton searchButton = createStyledButton("Search Transactions");
         JButton exitButton = createStyledButton("Exit");
 
@@ -290,7 +620,7 @@ public class Main {
     }
 
     // Load transactions from CSV
-    private static void loadTransactions() {
+    private static void loadTransactions2() {
         try (BufferedReader br = Files.newBufferedReader(Paths.get(CSV_FILE))) {
             String line;
             while ((line = br.readLine()) != null) {
