@@ -1,5 +1,7 @@
 // Version 2.5 (the "MIT"); you may use this file for demo purposes
-// Make sure to always leave notes so people know what functions do sometimes lol
+// Always leave descriptive comments for each function to improve code readability
+// and help others (or yourself in the future) understand the functionality.
+
 package org.ps;
 
 import javax.swing.*;
