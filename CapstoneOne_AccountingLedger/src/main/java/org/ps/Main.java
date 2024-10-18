@@ -31,12 +31,12 @@ public class Main {
         System.out.print("Enter your choice (1 or 2): ");
 
         int modeChoice = scanner.nextInt();
-        scanner.nextLine(); 
+        scanner.nextLine();
         loadTransactions(); // Load existing transactions from CSV
 
         switch (modeChoice) {
             case 1:
-                runCLI(scanner);  
+                runCLI(scanner);
                 break;
             case 2:
                 SwingUtilities.invokeLater(Main::runGUI);  // Start Graphical User Interface WIP
@@ -280,13 +280,24 @@ public class Main {
 
 
     private static void viewLedgerAll() {
-        System.out.println("--- Transaction Ledger ---");
-        System.out.printf("%-10s %-8s %-30s %-20s %-10s%n", "Date", "Time", "Description", "Vendor", "Amount");
-        System.out.println("-----------------------------------------------------------------------");
+        printLineBorder();
+        System.out.println("|                  Transaction Ledger                   |");
+        printLineBorder();
+
+        System.out.printf("| %-10s | %-8s | %-30s | %-20s | %-10s |%n", "Date", "Time", "Description", "Vendor", "Amount");
+        printLineBorder();
+
+        // Print each transaction
         for (Transaction transaction : transactions) {
-            System.out.println(transaction);
+            System.out.printf("| %-10s | %-8s | %-30s | %-20s | %-10.2f |%n",
+                    transaction.getDate(), transaction.getTime(),
+                    transaction.getDescription(), transaction.getVendor(),
+                    transaction.getAmount());
         }
+
+        printLineBorder();
     }
+
 
 
     private static void searchByVendor(Scanner scanner) {
