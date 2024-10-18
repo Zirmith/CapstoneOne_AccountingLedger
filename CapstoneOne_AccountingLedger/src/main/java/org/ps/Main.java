@@ -209,8 +209,18 @@ public class Main {
         double totalIncome = 0.0;
         double totalExpenses = 0.0;
 
+        System.out.printf("%-10s %-8s %-30s %-20s %-10s%n", "Date", "Time", "Description", "Vendor", "Amount");
+        System.out.println("----------------------------------------------------------------------");
+
         for (Transaction transaction : transactions) {
             if (transaction.getDate().startsWith(year + "-" + String.format("%02d", month))) {
+                System.out.printf("%-10s %-8s %-30s %-20s $%-10.2f%n",
+                        transaction.getDate(),
+                        transaction.getTime(),
+                        transaction.getDescription(),
+                        transaction.getVendor(),
+                        transaction.getAmount());
+
                 if (transaction.getAmount() > 0) {
                     totalIncome += transaction.getAmount();
                 } else {
@@ -219,6 +229,7 @@ public class Main {
             }
         }
 
+        System.out.println("----------------------------------------------------------------------");
         System.out.printf("Total Income: $%.2f%n", totalIncome);
         System.out.printf("Total Expenses: $%.2f%n", totalExpenses);
     }
@@ -232,8 +243,18 @@ public class Main {
         double totalIncome = 0.0;
         double totalExpenses = 0.0;
 
+        System.out.printf("%-10s %-8s %-30s %-20s %-10s%n", "Date", "Time", "Description", "Vendor", "Amount");
+        System.out.println("----------------------------------------------------------------------");
+
         for (Transaction transaction : transactions) {
             if (transaction.getDate().startsWith(year + "-" + String.format("%02d", month))) {
+                System.out.printf("%-10s %-8s %-30s %-20s $%-10.2f%n",
+                        transaction.getDate(),
+                        transaction.getTime(),
+                        transaction.getDescription(),
+                        transaction.getVendor(),
+                        transaction.getAmount());
+
                 if (transaction.getAmount() > 0) {
                     totalIncome += transaction.getAmount();
                 } else {
@@ -242,6 +263,7 @@ public class Main {
             }
         }
 
+        System.out.println("----------------------------------------------------------------------");
         System.out.printf("Total Income: $%.2f%n", totalIncome);
         System.out.printf("Total Expenses: $%.2f%n", totalExpenses);
     }
@@ -253,8 +275,18 @@ public class Main {
         double totalIncome = 0.0;
         double totalExpenses = 0.0;
 
+        System.out.printf("%-10s %-8s %-30s %-20s %-10s%n", "Date", "Time", "Description", "Vendor", "Amount");
+        System.out.println("----------------------------------------------------------------------");
+
         for (Transaction transaction : transactions) {
             if (transaction.getDate().startsWith(String.valueOf(year))) {
+                System.out.printf("%-10s %-8s %-30s %-20s $%-10.2f%n",
+                        transaction.getDate(),
+                        transaction.getTime(),
+                        transaction.getDescription(),
+                        transaction.getVendor(),
+                        transaction.getAmount());
+
                 if (transaction.getAmount() > 0) {
                     totalIncome += transaction.getAmount();
                 } else {
@@ -263,6 +295,7 @@ public class Main {
             }
         }
 
+        System.out.println("----------------------------------------------------------------------");
         System.out.printf("Total Income: $%.2f%n", totalIncome);
         System.out.printf("Total Expenses: $%.2f%n", totalExpenses);
     }
@@ -274,8 +307,18 @@ public class Main {
         double totalIncome = 0.0;
         double totalExpenses = 0.0;
 
+        System.out.printf("%-10s %-8s %-30s %-20s %-10s%n", "Date", "Time", "Description", "Vendor", "Amount");
+        System.out.println("----------------------------------------------------------------------");
+
         for (Transaction transaction : transactions) {
             if (transaction.getDate().startsWith(String.valueOf(year))) {
+                System.out.printf("%-10s %-8s %-30s %-20s $%-10.2f%n",
+                        transaction.getDate(),
+                        transaction.getTime(),
+                        transaction.getDescription(),
+                        transaction.getVendor(),
+                        transaction.getAmount());
+
                 if (transaction.getAmount() > 0) {
                     totalIncome += transaction.getAmount();
                 } else {
@@ -284,6 +327,7 @@ public class Main {
             }
         }
 
+        System.out.println("----------------------------------------------------------------------");
         System.out.printf("Total Income: $%.2f%n", totalIncome);
         System.out.printf("Total Expenses: $%.2f%n", totalExpenses);
     }
