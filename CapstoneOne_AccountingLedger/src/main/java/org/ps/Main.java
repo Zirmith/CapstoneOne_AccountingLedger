@@ -2,6 +2,7 @@
 // Always leave descriptive comments for each function to improve code readability
 // and help others (or yourself in the future) understand the functionality.
 
+////  Start of the imports or packages ////
 package org.ps;
 
 import javax.swing.*;
@@ -15,18 +16,20 @@ import java.util.Comparator;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+//// End of the imports or packages /////
+
 public class Main {
     private static final String CSV_FILE = "transactions.csv"; // Path to the CSV file
     private static List<Transaction> transactions = new ArrayList<>(); // List to store transactions
 
 
-    private static void clearConsole() {
+    private static void clearConsole() { // This is used for clearing console doesn't really work here
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }
 
 
-
+// This is the start of our program //
 
     public static void main(String[] args) {
         clearConsole();
@@ -79,13 +82,13 @@ public class Main {
 
             switch (choice) {
                 case 1:
-                    addDeposit(scanner); // Add deposit
+                    addDeposit(scanner); //  Calling Function for Add deposit
                     break;
                 case 2:
-                    addPayment(scanner); // Add payment
+                    addPayment(scanner); //  Calling Function for Add payment
                     break;
                 case 3:
-                    runLedgerMenu(scanner); // Open ledger menu
+                    runLedgerMenu(scanner); //  Calling Function for Open ledger menu
                     break;
                 case 4:
                     System.out.println("Thank you for using the Accounting Ledger. Goodbye!");
@@ -111,23 +114,23 @@ public class Main {
             System.out.print("Select an option (1-5): ");
 
             int choice = scanner.nextInt();
-            scanner.nextLine();  
+            scanner.nextLine();
 
             switch (choice) {
                 case 1:
-                    viewLedgerAll(); // View all transactions
+                    viewLedgerAll(); //  Calling Function for View all transactions
                     break;
                 case 2:
-                    viewDeposits(); // View only deposit transactions
+                    viewDeposits(); //  Calling Function for View only deposit transactions
                     break;
                 case 3:
-                    viewPayments(); // View only payment transactions
+                    viewPayments(); //  Calling Function for View only payment transactions
                     break;
                 case 4:
-                    runReportsMenu(scanner); // Open reports menu
+                    runReportsMenu(scanner); //  Calling Function for Open reports menu
                     break;
                 case 5:
-                    return; 
+                    return;
                 default:
                     System.out.println("Invalid option, please try again.");
             }
@@ -140,7 +143,7 @@ public class Main {
         System.out.printf("%-10s %-8s %-30s %-20s %-10s%n", "Date", "Time", "Description", "Vendor", "Amount");
         System.out.println("-----------------------------------------------------------------------");
         for (Transaction transaction : transactions) {
-            if (transaction.getAmount() > 0) { 
+            if (transaction.getAmount() > 0) {
                 System.out.println(transaction);
             }
         }
@@ -151,7 +154,7 @@ public class Main {
         System.out.printf("%-10s %-8s %-30s %-20s %-10s%n", "Date", "Time", "Description", "Vendor", "Amount");
         System.out.println("-----------------------------------------------------------------------");
         for (Transaction transaction : transactions) {
-            if (transaction.getAmount() < 0) { 
+            if (transaction.getAmount() < 0) {
                 System.out.println(transaction);
             }
         }
@@ -173,26 +176,26 @@ public class Main {
             System.out.print("Select an option (1-6): ");
 
             int choice = scanner.nextInt();
-            scanner.nextLine();  // Consume newline character
+            scanner.nextLine();
 
             switch (choice) {
                 case 1:
-                    generateMonthToDateReport(); // Month to date report
+                    generateMonthToDateReport(); //  Calling Function for Month to date report
                     break;
                 case 2:
-                    generatePreviousMonthReport(); // Previous month report
+                    generatePreviousMonthReport(); //  Calling Function for Previous month report
                     break;
                 case 3:
-                    generateYearToDateReport(); // Year to date report
+                    generateYearToDateReport(); // Calling Function for Year to date report
                     break;
                 case 4:
-                    generatePreviousYearReport(); // Previous year report
+                    generatePreviousYearReport(); // Calling Function for Previous year report
                     break;
                 case 5:
-                    searchByVendor(scanner); // Search by vendor
+                    searchByVendor(scanner); //  Calling Function for Search by vendor
                     break;
                 case 6:
-                    return; // Return to the ledger menu
+                    return;
                 default:
                     System.out.println("Invalid option, please try again.");
             }
@@ -448,7 +451,12 @@ public class Main {
         return new SimpleDateFormat("HH:mm:ss").format(System.currentTimeMillis());
     }
 
-// Stuff Below this is being worked on currently didn't have enough time to complete the Beta's
+
+    // This is the end of our program //
+
+
+
+//  Below  is being worked on currently didn't have enough time to complete the Beta's
 
     // Command-line interface logic
     private static void runCLIBeta(Scanner scanner) {
