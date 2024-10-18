@@ -1,4 +1,5 @@
-// Version 2.5 (the "MIT"); you may use this file
+// Version 2.5 (the "MIT"); you may use this file for demo purposes
+// Make sure to always leave notes so people know what functions do sometimes lol
 package org.ps;
 
 import javax.swing.*;
@@ -108,7 +109,7 @@ public class Main {
             System.out.print("Select an option (1-5): ");
 
             int choice = scanner.nextInt();
-            scanner.nextLine();  // Consume newline character
+            scanner.nextLine();  
 
             switch (choice) {
                 case 1:
@@ -124,7 +125,7 @@ public class Main {
                     runReportsMenu(scanner); // Open reports menu
                     break;
                 case 5:
-                    return; // Return to the main menu
+                    return; 
                 default:
                     System.out.println("Invalid option, please try again.");
             }
@@ -137,7 +138,7 @@ public class Main {
         System.out.printf("%-10s %-8s %-30s %-20s %-10s%n", "Date", "Time", "Description", "Vendor", "Amount");
         System.out.println("-----------------------------------------------------------------------");
         for (Transaction transaction : transactions) {
-            if (transaction.getAmount() > 0) { // Check if it's a deposit
+            if (transaction.getAmount() > 0) { 
                 System.out.println(transaction);
             }
         }
@@ -148,7 +149,7 @@ public class Main {
         System.out.printf("%-10s %-8s %-30s %-20s %-10s%n", "Date", "Time", "Description", "Vendor", "Amount");
         System.out.println("-----------------------------------------------------------------------");
         for (Transaction transaction : transactions) {
-            if (transaction.getAmount() < 0) { // Check if it's a payment
+            if (transaction.getAmount() < 0) { 
                 System.out.println(transaction);
             }
         }
