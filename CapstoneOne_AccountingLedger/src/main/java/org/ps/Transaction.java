@@ -59,7 +59,6 @@ public class Transaction {
                 String.valueOf(amount).contains(search);
     }
 
-
     // Check if the date format is valid (yyyy-MM-dd)
     public static boolean isValidDate(String date) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -112,10 +111,19 @@ public class Transaction {
         }
     }
 
+    // Convert transaction details to CSV format
+    public String toCSV() {
+        return String.join("|", date, time, description, vendor, String.valueOf(amount));
+    }
 
+    // Return the formatted transaction as a string for display
     @Override
     public String toString() {
-        String formattedAmount = amount < 0 ? String.format("-$%.2f", Math.abs(amount)) : String.format("$%.2f", amount);
-        return String.format("%s | %s | %s | %s | %s", date, time, description, vendor, formattedAmount);
+        return String.format("%-10s %-8s %-30s %-20s %-10.2f", date, time, description, vendor, amount);
+    }
+
+    // Static method to return the header for the ledger
+    public static String getHeader() {
+        return String.format("%-10s %-8s %-30s %-20s %-10s", "Date", "Time", "Description", "Vendor", "Amount");
     }
 }
