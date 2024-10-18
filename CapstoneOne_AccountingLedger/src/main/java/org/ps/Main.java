@@ -303,7 +303,7 @@ public class Main {
     private static void generatePreviousYearReport() {
         System.out.println("--- Previous Year Report ---");
         Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR) - 1; // Get the previous year
+        int year = calendar.get(Calendar.YEAR) - 1; 
         double totalIncome = 0.0;
         double totalExpenses = 0.0;
 
@@ -341,7 +341,7 @@ public class Main {
         System.out.printf("| %-10s | %-8s | %-30s | %-20s | %-10s |%n", "Date", "Time", "Description", "Vendor", "Amount");
         printLineBorder();
 
-        // Print each transaction
+       
         for (Transaction transaction : transactions) {
             System.out.printf("| %-10s | %-8s | %-30s | %-20s | %-10.2f |%n",
                     transaction.getDate(), transaction.getTime(),
@@ -356,7 +356,7 @@ public class Main {
 
     private static void searchByVendor(Scanner scanner) {
         System.out.print("Enter vendor name to search: ");
-        String vendorName = scanner.nextLine().toLowerCase(); // Convert to lowercase for case-insensitive search
+        String vendorName = scanner.nextLine().toLowerCase(); 
         boolean found = false;
 
         System.out.printf("%-10s %-8s %-30s %-20s %-10s%n", "Date", "Time", "Description", "Vendor", "Amount");
@@ -448,7 +448,7 @@ public class Main {
 
 
     // Command-line interface logic
-    private static void runCLI2(Scanner scanner) {
+    private static void runCLIBeta(Scanner scanner) {
 
         while (true) {
             System.out.println("\n--- Main Menu ---");
