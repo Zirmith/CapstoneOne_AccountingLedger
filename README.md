@@ -48,7 +48,8 @@ This Accounting Ledger application is developed as part of the **CapstoneOne_Acc
 
 Here are some images of the Accounting Ledger application in action:
 
-![CLI Mode Screenshot](Assets/cli_mode_screenshot.png)
+![CLI Mode Screenshot](Assets/MainMenu.png)
+![CLI Mode Screenshot](Assets/MainMenu2.png)
 *CLI Mode: View Transactions*
 
 ![GUI Mode Screenshot](Assets/gui_mode_screenshot.png)
