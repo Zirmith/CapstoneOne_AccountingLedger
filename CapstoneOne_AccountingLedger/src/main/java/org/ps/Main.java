@@ -16,7 +16,17 @@ public class Main {
     private static final String CSV_FILE = "transactions.csv"; // Path to the CSV file
     private static List<Transaction> transactions = new ArrayList<>(); // List to store transactions
 
+
+    private static void clearConsole() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+    }
+
+
+
+
     public static void main(String[] args) {
+        clearConsole();
         printLineBorder();
         System.out.println("|          Welcome to the Accounting Ledger!          |");
         printLineBorder();
