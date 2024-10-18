@@ -49,7 +49,7 @@ public class Main {
                 runCLI(scanner);
                 break;
             case 2:
-                SwingUtilities.invokeLater(Main::runGUI);  // Start Graphical User Interface WIP
+               // SwingUtilities.invokeLater(Main::runGUI);  // Start Graphical User Interface WIP
                 break;
             default:
                 printLineBorder();
